@@ -210,10 +210,72 @@
           for round-result = (matrix-result (do-round matrix round))
           do
              (incf (gethash round-result result-counters 0))
+             (when *verbose*
+               (format t "   ~d~%" (gethash round-result result-counters)))
           while (< (gethash round-result result-counters 0) repeats)
           finally
           return (values (* round round-result)
                          round round-result
-                         (gethash round-result result-counters)))))
+                         matrix
+                         result-counters))))
 
 (dance-until-repeated *floor-2* 2024)
+
+(defparameter *demo-floor-3* "2 3 4 5
+6 7 8 9")
+
+(defparameter *floor-3* "1001 1008 1000 1009
+1000 1005 1007 1001
+1002 1000 1002 4452
+1001 1000 1006 1003
+1003 1006 1002 1002
+1009 9416 1003 1001
+1003 1002 1001 1008
+1009 1000 4165 1003
+1001 1004 1004 3505
+1003 1001 1002 1000
+1007 1002 1003 1000
+1006 1004 1008 1006
+1002 1001 1001 1006
+1005 1005 1008 1005
+1003 1002 7255 1005
+1008 1000 8139 3759
+1003 1000 9793 1008
+1008 1006 1001 1003
+1003 1006 1001 1008
+1006 1007 1001 1004
+7221 1003 1005 1008
+1002 7865 1005 1001
+1003 1006 1004 1006
+1003 1001 1003 8375
+1000 1002 1001 1003
+1000 1005 1004 1001
+1004 1007 1003 1006
+1009 1004 2623 1005
+5225 1009 1004 1008
+1003 1006 1005 1007
+1005 1001 1008 1001
+1006 1008 1004 1001
+1004 1008 1005 1008
+1000 1009 1007 1001
+1002 1003 1008 9038
+1002 1008 1004 2963
+1006 1006 1001 1006
+1004 1003 1004 1007
+1007 1001 1001 6406
+1004 1009 1008 1004
+1005 1004 1000 3525
+1003 1001 1000 1003
+1005 1001 1005 4050
+4194 1003 1009 1008
+1005 1004 1001 1006
+1005 1007 1005 1003
+1002 1008 1004 1005
+1000 1003 1005 1004
+1006 1000 1005 1008
+1006 8595 1008 1007")
+
+(defun dance-find-max (floor)
+  (let ((shouts (nth-value 4 (dance-until-repeated floor 4000))))
+    (loop for key being the hash-keys of shouts
+          maximize key)))
